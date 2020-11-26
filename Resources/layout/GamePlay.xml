@@ -17,7 +17,7 @@
     <TextView
         android:text="Hangman"
         android:layout_width="match_parent"
-        android:layout_height="40.5dp"
+        android:layout_height="40.5dp" 
         android:id="@+id/tvTitle"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -25,7 +25,7 @@
         android:textAlignment="center"
         android:textColor="#ffffffff" />
     <ImageView
-        android:src="@android:drawable/hangmanstart"
+       
         android:layout_width="match_parent"
         android:layout_height="197.0dp"
         android:id="@+id/imgHangingMan"
@@ -296,5 +296,22 @@
             android:backgroundTint="#ff0b4500"
             android:textColor="#ffffffff" />
     </LinearLayout>
+    <TextView
+        android:text="WINS: 0"
+        android:layout_width="match_parent"
+        android:layout_height="35.5dp"
+        android:id="@+id/tvWins"
+        android:textColor="#ffffffff"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:paddingTop="10px" />
+    <TextView
+        android:text="LOSSES: 0"
+        android:layout_width="match_parent"
+        android:layout_height="35.5dp"
+        android:id="@+id/tvLosses"
+        android:textColor="#ffffffff"
+        android:textAlignment="center"
+        android:textStyle="bold"/>
 
 </LinearLayout>

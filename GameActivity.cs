@@ -56,6 +56,28 @@ namespace DSD03_Hangman
         //a counter that is increased every time the user guesses an incorrect letter
         int IncorrectCounter;
 
+        //setting data for the winning or losing toast messages
+        private void ToastMessage(int WinLose) { 
+            //WinLose is an int that is set to 1 if the user has lost the game or 2 if the user has won the game
+            Context context = Application.Context;
+            ToastLength duration = ToastLength.Long;
+            if (WinLose == 1) //toast message to inform the user that they have lost the game
+            {
+                string text = "YOU LOSE! To play again, tap on the play button!";
+                Toast toast = Toast.MakeText(context, text, duration);
+                toast.SetGravity(GravityFlags.Center, 0, 0);
+                toast.Show();
+            }
+            else //toast message to inform the user they have won the game
+            {
+                string text = "YOU WIN! To play again, tap on the play button!";
+                var toast = Toast.MakeText(context, text, duration);
+                toast.SetGravity(GravityFlags.Center, 0, 0);
+                toast.Show();
+            }
+        }
+
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -240,6 +262,7 @@ namespace DSD03_Hangman
                         return;
                     case 5:
                         imgHangingMan.SetImageResource(Resource.Drawable.hangmanfinish);
+                        ToastMessage(1);
                         return;
                     default:
                         break;
