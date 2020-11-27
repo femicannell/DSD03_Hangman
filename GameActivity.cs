@@ -175,8 +175,8 @@ namespace DSD03_Hangman
             //set the counter for the times an incorrect letter is guessed to 0
             IncorrectCounter = 0;
 
-            //re-enable all the buttons when play button is pressed
-            //top row
+            //re-enable all the keyboard buttons when play button is pressed
+            //top row of the keyboard
             btnQ.Enabled = true;
             btnW.Enabled = true;
             btnE.Enabled = true;
@@ -187,7 +187,7 @@ namespace DSD03_Hangman
             btnI.Enabled = true;
             btnO.Enabled = true;
             btnP.Enabled = true;
-            //middle row
+            //middle row of the keyboard
             btnA.Enabled = true;
             btnS.Enabled = true;
             btnD.Enabled = true;
@@ -197,7 +197,7 @@ namespace DSD03_Hangman
             btnJ.Enabled = true;
             btnK.Enabled = true;
             btnL.Enabled = true;
-            //bottom row
+            //bottom row of the keyboard
             btnZ.Enabled = true;
             btnX.Enabled = true;
             btnC.Enabled = true;
@@ -207,10 +207,11 @@ namespace DSD03_Hangman
             btnM.Enabled = true;
         }
         
-        private void AllAlphaButton_Click(object sender, EventArgs e)
+        private void AllAlphaButton_Click(object sender, EventArgs e) //when any letter on the keyboard is pressed
         {
             Button fakeBtn = (Button)sender;
 
+            //run the method that checks whether or not the guess is correct
             GamePlay(fakeBtn.Text.ToLower());
 
             //disable the letter that has just been pressed as no letter can be guessed twice
@@ -237,15 +238,19 @@ namespace DSD03_Hangman
             }
         }
 
-        private bool GameWon()
+        private bool GameWon() //method to check if the user has won
         {
+            //for loop that runs through the length of both the chosen word array and the underscore array (as they are the same length)
             for (int i = 0; i < ChosenWordArray.Length; i++)
             {
+                //check to see if each letter in the arrays is the same
                 if (ChosenWordArray[i] != ChosenWordUnderscoreArray[i])
                 {
+                    //if there are any letters that do not match, that means the underscore array still contains at least one underscore so the whole word has not been guessed yet, therefore the user has not won yet
                     return false;
                 }
             }
+            //if all of the letters match, the user has won
             return true;
         }
 
@@ -300,6 +305,7 @@ namespace DSD03_Hangman
             }
             else //if the pressed letter is not in the chosen word
             {
+                //add to the incorrect guess counter
                 IncorrectCounter += 1;
                 switch (IncorrectCounter)
                 {
@@ -319,7 +325,7 @@ namespace DSD03_Hangman
                     case 4:
                         imgHangingMan.SetImageResource(Resource.Drawable.hangmanright);
                         return;
-                    case 5:
+                    case 5: //this is the last possible incorrect guess. If the code gets to this point the user has lost the game.
                         imgHangingMan.SetImageResource(Resource.Drawable.hangmanfinish);
                         //update the loss counter and the textview displaying it
                         LoseCounter += 1;
@@ -345,8 +351,11 @@ namespace DSD03_Hangman
             
             if (GameWon() == true)
             {
+                //add to the win counter
                 WinCounter += 1;
+                //update the textview displaying the score
                 tvWin.Text = ("WINS: " + WinCounter);
+                //display the toast message informing the user that they have won the game
                 ToastMessage(2);
 
                 //disable all keyboard buttons as the game is now over
