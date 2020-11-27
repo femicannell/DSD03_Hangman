@@ -15,10 +15,12 @@ namespace DSD03_Hangman
 
     public class GameActivity : Activity
     {
-        //The word being guessed and the play button
+        //The word being guessed, play button, images, and win/loss info
         TextView tvWord;
         Button btnPlay;
         ImageView imgHangingMan;
+        TextView tvWin;
+        TextView tvLose;
         //First row of the keyboard
         Button btnQ;
         Button btnW;
@@ -55,6 +57,9 @@ namespace DSD03_Hangman
         string ChosenWord;
         //a counter that is increased every time the user guesses an incorrect letter
         int IncorrectCounter;
+        //counters for the amount of times the user has won or lost the game and set to 0
+        int WinCounter = 0;
+        int LoseCounter = 0;
 
         //setting data for the winning or losing toast messages
         private void ToastMessage(int WinLose) { 
@@ -95,6 +100,8 @@ namespace DSD03_Hangman
             btnPlay = FindViewById<Button>(Resource.Id.btnPlay);
             tvWord = FindViewById<TextView>(Resource.Id.tvWord);
             imgHangingMan = FindViewById<ImageView>(Resource.Id.imgHangingMan);
+            tvWin = FindViewById<TextView>(Resource.Id.tvWins);
+            tvLose = FindViewById<TextView>(Resource.Id.tvLosses);
 
             btnPlay.Click += BtnPlay_Click;
             //First row of the keyboard - Ids
@@ -206,6 +213,7 @@ namespace DSD03_Hangman
 
             GamePlay(fakeBtn.Text.ToLower());
 
+            //disable the letter that has just been pressed as no letter can be guessed twice
             fakeBtn.Enabled = false;
         }
 
@@ -222,9 +230,57 @@ namespace DSD03_Hangman
             ChosenWordUnderscoreArray = new char[ChosenWordArray.Length];
             for (int i = 0; i < ChosenWordUnderscoreArray.Length; i++)
             {
+                //displaying the "word" as underscores on game start
                 tvWord.Text += "_ ";
+                //setting the contents of the underscore array to underscores (for display purposes mostly)
                 ChosenWordUnderscoreArray[i] = '_';
             }
+        }
+
+        private bool GameWon()
+        {
+            for (int i = 0; i < ChosenWordArray.Length; i++)
+            {
+                if (ChosenWordArray[i] != ChosenWordUnderscoreArray[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private void DisableKeyboard()
+        {
+            //disable all keyboard buttons
+            //top row
+            btnQ.Enabled = false;
+            btnW.Enabled = false;
+            btnE.Enabled = false;
+            btnR.Enabled = false;
+            btnT.Enabled = false;
+            btnY.Enabled = false;
+            btnU.Enabled = false;
+            btnI.Enabled = false;
+            btnO.Enabled = false;
+            btnP.Enabled = false;
+            //middle row
+            btnA.Enabled = false;
+            btnS.Enabled = false;
+            btnD.Enabled = false;
+            btnF.Enabled = false;
+            btnG.Enabled = false;
+            btnH.Enabled = false;
+            btnJ.Enabled = false;
+            btnK.Enabled = false;
+            btnL.Enabled = false;
+            //bottom row
+            btnZ.Enabled = false;
+            btnX.Enabled = false;
+            btnC.Enabled = false;
+            btnV.Enabled = false;
+            btnB.Enabled = false;
+            btnN.Enabled = false;
+            btnM.Enabled = false;
         }
 
         private void GamePlay(string Letter)
@@ -233,18 +289,21 @@ namespace DSD03_Hangman
             if (ChosenWord.Contains(Letter)) //if the pressed letter is in the chosen word
             {
                 for (int i = 0; i < ChosenWordArray.Length; i++)
-                {
+                {    
                     if (Letter == ChosenWordArray[i].ToString())
                     {
+                        //replacing the underscore in the array with the correctly guessed letter
                         ChosenWordUnderscoreArray[i] = Convert.ToChar(Letter);
                     }
                 }
+                GameWon();
             }
             else //if the pressed letter is not in the chosen word
             {
                 IncorrectCounter += 1;
                 switch (IncorrectCounter)
                 {
+                    //setting the images due to how many incorrect guesses the user has made
                     case 0:
                         imgHangingMan.SetImageResource(Resource.Drawable.hangmanstart);
                         return;
@@ -262,7 +321,14 @@ namespace DSD03_Hangman
                         return;
                     case 5:
                         imgHangingMan.SetImageResource(Resource.Drawable.hangmanfinish);
+                        //update the loss counter and the textview displaying it
+                        LoseCounter += 1;
+                        tvLose.Text = ("LOSSES: " + LoseCounter);
+                        //display toast message informing the user that they have lost the game
                         ToastMessage(1);
+                        //disable all keyboard buttons as the game is now over
+                        DisableKeyboard();
+                        
                         return;
                     default:
                         break;
@@ -276,6 +342,17 @@ namespace DSD03_Hangman
             {
                 tvWord.Text += (letter + " "); //showing the word on the screen with as many correct letter as have been guessed, or underscores for unguessed letters
             }
+            
+            if (GameWon() == true)
+            {
+                WinCounter += 1;
+                tvWin.Text = ("WINS: " + WinCounter);
+                ToastMessage(2);
+
+                //disable all keyboard buttons as the game is now over
+                DisableKeyboard();
+            }
+
         }
         
     }
